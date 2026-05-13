@@ -86,24 +86,6 @@ ParallelPointInPolygon/
 
 # Algorithm Workflow
 
-```text
-Generate Polygon
-      ↓
-Generate Random Points
-      ↓
-Sequential Check
-      ↓
-Parallel Check (1,2,4,8 threads)
-      ↓
-Measure Execution Time
-      ↓
-Calculate Speedup
-      ↓
-Save CSV
-      ↓
-Generate Graph
-```
-
 <img width="1024" height="1536" alt="workflow" src="https://github.com/user-attachments/assets/068f1b85-e013-492c-a5d1-5f5973db0840" />
 
 ---
