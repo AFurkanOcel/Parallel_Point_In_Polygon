@@ -1,6 +1,5 @@
 *.class
-*.csv
-*.png
 .vscode/
 bin/
 out/
+Results/

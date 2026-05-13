@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-df = pd.read_csv("results.csv")
+df = pd.read_csv("Results/Results.csv")
 
 threads = df["Threads"]
 
@@ -37,7 +37,7 @@ for text in legend.get_texts():
     text.set_color("white")
 
 plt.savefig(
-    "speedup_graph.png",
+    "Results/SpeedupGraph.png",
     facecolor='black',
     bbox_inches='tight'
 )

@@ -87,7 +87,7 @@ public class Main {
                     new double[threadCounts.length][testSizes.length];
 
             // create csv file
-            PrintWriter writer = new PrintWriter("results.csv");
+            PrintWriter writer = new PrintWriter("Results/Results.csv");
             writer.println("Threads,500000,1000000,2000000");
 
             for (int j = 0; j < testSizes.length; j++) {
@@ -152,7 +152,7 @@ public class Main {
 
             writer.close();
 
-            System.out.println("\nresults.csv created.");
+            System.out.println("\nResults.csv created.");
 
             // automatically run python graph script
             ProcessBuilder pb =
@@ -161,7 +161,7 @@ public class Main {
             pb.inheritIO();
             pb.start().waitFor();
 
-            System.out.println("speedup_graph.png created.");
+            System.out.println("SpeedupGraph.png created.");
 
         } catch (Exception e) {
             e.printStackTrace();
