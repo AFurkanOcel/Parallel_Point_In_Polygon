@@ -31,7 +31,7 @@ This project uses the **Ray Casting Algorithm**, which counts how many times a h
 - odd intersections → inside
 - even intersections → outside
 
-<img width="1536" height="1024" alt="ray casting" src="https://github.com/user-attachments/assets/34d81e20-5b91-41bb-85cb-cb9b8574e825" />
+<img width="701" height="298" alt="ray casting" src="https://github.com/user-attachments/assets/e7d6e561-633a-4337-ba79-60721bad4e4a" />
 
 ---
 
