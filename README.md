@@ -1,4 +1,19 @@
-# Parallel Point In Polygon Detection using Java
+<h1 align="center">Parallel Point In Polygon Detection</h1>
+
+<p align="center">
+Parallel point-in-polygon detection using Java multithreading, performance benchmarking, and automatic speedup visualization.
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Language-Java-orange"/>
+  <img src="https://img.shields.io/badge/Parallelism-ExecutorService-blue"/>
+  <img src="https://img.shields.io/badge/Algorithm-Ray%20Casting-green"/>
+  <img src="https://img.shields.io/badge/Visualization-Python%20%2B%20Matplotlib-purple"/>
+  <img src="https://img.shields.io/badge/Architecture-Object%20Oriented-red"/>
+  <img src="https://img.shields.io/badge/Status-Completed-brightgreen"/>
+</p>
+
+---
 
 ## Project Overview
 
