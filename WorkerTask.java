@@ -1,23 +1,24 @@
 import java.util.*;
 import java.util.concurrent.Callable;
 
-public class WorkerTask implements Callable<Integer>{
+public class WorkerTask implements Callable<Integer> {
 
-    private List<Point> points;
-    private Polygon polygon;
+    private final List<Point> points;
+    private final Polygon polygon;
 
-    public WorkerTask(List<Point> points, Polygon polygon){
+    public WorkerTask(List<Point> points, Polygon polygon) {
         this.points = points;
         this.polygon = polygon;
     }
 
     @Override
-    public Integer call(){
+    public Integer call() {
         int count = 0;
 
-        for(Point p: points){
-            if(PointInPolygon.isInside(p, polygon))
+        for (Point point : points) {
+            if (PointInPolygon.isInside(point, polygon)) {
                 count++;
+            }
         }
 
         return count;

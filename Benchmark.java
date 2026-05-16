@@ -1,9 +1,12 @@
-public class Benchmark {
-    public static long start(){
+public final class Benchmark {
+    private Benchmark() {
+    }
+
+    public static long start() {
         return System.nanoTime();
     }
 
-    public static double stop(long start){
-        return (System.nanoTime()-start)/1e6;
+    public static double stop(long start) {
+        return (System.nanoTime() - start) / 1e6;
     }
 }

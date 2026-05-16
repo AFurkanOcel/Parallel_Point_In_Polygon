@@ -1,45 +1,49 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-df = pd.read_csv("Results/Results.csv")
 
-threads = df["Threads"]
+RESULTS_CSV = "Results/Results.csv"
+OUTPUT_IMAGE = "Results/SpeedupGraph.png"
 
-fig = plt.figure(figsize=(10, 6), facecolor='black')
-ax = fig.add_subplot(111)
 
-ax.set_facecolor('black')
+def main():
+    df = pd.read_csv(RESULTS_CSV)
 
-for column in df.columns[1:]:
-    plt.plot(
-        threads,
-        df[column],
-        marker='o',
-        label=f"{column} points"
-    )
+    fig = plt.figure(figsize=(10, 6), facecolor="black")
+    ax = fig.add_subplot(111)
+    ax.set_facecolor("black")
 
-plt.xlabel("Number of Threads", color="white")
-plt.ylabel("Speedup", color="white")
-plt.title("Parallel Speedup Analysis", color="white")
+    for point_count, group in df.groupby("PointCount"):
+        group = group.sort_values("ThreadCount")
+        ax.plot(
+            group["ThreadCount"],
+            group["Speedup"],
+            marker="o",
+            label=f"{point_count} points"
+        )
 
-plt.xticks(threads, color="white")
-plt.yticks(color="white")
+    ax.set_xlabel("Number of Threads", color="white")
+    ax.set_ylabel("Speedup", color="white")
+    ax.set_title("Parallel Speedup Analysis", color="white")
 
-plt.grid(True, color="gray", alpha=0.3)
+    ax.set_xticks(sorted(df["ThreadCount"].unique()))
+    ax.tick_params(axis="x", colors="white")
+    ax.tick_params(axis="y", colors="white")
+    ax.grid(True, color="gray", alpha=0.3)
 
-for spine in ax.spines.values():
-    spine.set_color("white")
+    for spine in ax.spines.values():
+        spine.set_color("white")
 
-legend = plt.legend()
-legend.get_frame().set_facecolor("black")
-legend.get_frame().set_edgecolor("white")
-for text in legend.get_texts():
-    text.set_color("white")
+    legend = ax.legend()
+    legend.get_frame().set_facecolor("black")
+    legend.get_frame().set_edgecolor("white")
 
-plt.savefig(
-    "Results/SpeedupGraph.png",
-    facecolor='black',
-    bbox_inches='tight'
-)
+    for text in legend.get_texts():
+        text.set_color("white")
 
-plt.show()
+    plt.savefig(OUTPUT_IMAGE, facecolor="black", bbox_inches="tight")
+    plt.close(fig)
+
+
+if __name__ == "__main__":
+    main()

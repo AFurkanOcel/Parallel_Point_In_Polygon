@@ -2,34 +2,37 @@
 
 ## Project Overview
 
-This project solves the **Point In Polygon (PIP)** problem using **parallel programming** in Java.
+This project solves the **Point In Polygon (PIP)** problem with a Java-based
+parallel programming approach.
 
 Given:
 
-- a **convex or concave polygon** defined by multiple `(x, y)` coordinates
-- a large set of random test points
+- a polygon represented by ordered `(x, y)` vertices
+- a large list of test points
 
-the program determines whether each point lies **inside** or **outside** the polygon.
+the program determines how many points are inside the polygon. It compares a
+single-threaded sequential solution with a parallel solution implemented with
+`ExecutorService`, `Callable`, and `Future`.
 
-The project compares:
-
-- **Sequential execution**
-- **Parallel execution using multiple threads**
-
-and analyzes the **speedup performance**.
+The implementation supports both convex and concave polygons. Points located on
+a polygon edge or vertex are treated as inside.
 
 ---
 
 ## Problem Definition
 
-The Point-In-Polygon problem determines whether a point lies inside a polygon.
+The Point In Polygon problem determines whether a point lies inside, outside, or
+on the boundary of a polygon.
 
-This project uses the **Ray Casting Algorithm**, which counts how many times a horizontal ray intersects polygon edges.
+This project uses the **Ray Casting Algorithm**. A horizontal ray is extended
+from the test point to the right side of the plane, and polygon edge
+intersections are counted.
 
 ### Rule
 
-- odd intersections → inside
-- even intersections → outside
+- Odd number of intersections: inside
+- Even number of intersections: outside
+- Point on an edge or vertex: inside
 
 <img width="701" height="298" alt="ray casting" src="https://github.com/user-attachments/assets/e7d6e561-633a-4337-ba79-60721bad4e4a" />
 
@@ -39,242 +42,263 @@ This project uses the **Ray Casting Algorithm**, which counts how many times a h
 
 | Technology | Purpose |
 |-----------|---------|
-| Java | Main project implementation |
-| ExecutorService | Parallel processing |
-| Visual Studio Code | Development environment |
+| Java | Main implementation |
+| ExecutorService | Parallel task execution |
+| Callable and Future | Worker result collection |
 | Python | Graph generation |
-| Matplotlib | Visualization |
 | Pandas | CSV processing |
-| GitHub | Version control |
+| Matplotlib | Speedup visualization |
 
 ---
 
-# Project Structure
+## Project Structure
 
 ```text
 ParallelPointInPolygon/
-│── Main.java
-│── Point.java
-│── Polygon.java
-│── PointInPolygon.java
-│── WorkerTask.java
-│── Benchmark.java
-│── PlotResults.py
-│── .gitignore
-│── README.md
-│
-└── Results/
-    │── Results.csv
-    └── SpeedupGraph.png
+|-- Main.java
+|-- Point.java
+|-- Polygon.java
+|-- PointInPolygon.java
+|-- WorkerTask.java
+|-- Benchmark.java
+|-- BenchmarkConfig.java
+|-- BenchmarkResult.java
+|-- BenchmarkRunner.java
+|-- CsvResultWriter.java
+|-- DataGenerator.java
+|-- ValidationTest.java
+|-- PlotResults.py
+|-- README.md
+|-- LICENSE
+|
+`-- Results/
+    |-- Results.csv
+    `-- SpeedupGraph.png
 ```
 
 ---
 
-## File Descriptions
+## Main Components
 
-| File | Description |
-|------|-------------|
-| `Main.java` | Controls program flow and benchmarking |
-| `Point.java` | Stores x-y coordinates |
-| `Polygon.java` | Polygon vertex container |
-| `PointInPolygon.java` | Ray Casting implementation |
-| `WorkerTask.java` | Parallel worker thread logic |
-| `Benchmark.java` | Execution time measurement |
-| `PlotResults.py` | Automatic graph generation |
-| `Results.csv` | Benchmark outputs |
-| `SpeedupGraph.png` | Generated performance graph |
+| File | Responsibility |
+|------|----------------|
+| `Main.java` | Starts the benchmark workflow and graph generation |
+| `Point.java` | Immutable point model |
+| `Polygon.java` | Immutable polygon vertex container |
+| `PointInPolygon.java` | Ray Casting implementation with boundary handling |
+| `WorkerTask.java` | Parallel worker task for a point chunk |
+| `BenchmarkRunner.java` | Sequential and parallel execution logic |
+| `BenchmarkConfig.java` | Benchmark parameters |
+| `BenchmarkResult.java` | Benchmark result model |
+| `CsvResultWriter.java` | CSV output writer |
+| `DataGenerator.java` | Random point and polygon generation |
+| `ValidationTest.java` | Framework-free correctness checks |
+| `PlotResults.py` | Speedup graph generator |
 
 ---
 
-# Algorithm Workflow
+## Algorithm Workflow
 
 <img width="1024" height="1466" alt="workflow" src="https://github.com/user-attachments/assets/ef5d63e5-0597-4036-956f-90efd6382862" />
 
 ---
 
-# Polygon Generation
+## Polygon Generation
 
-A circular polygon with **200 vertices** is generated for heavier computation.
-
-### Formula
+The benchmark uses a circular convex polygon with 200 vertices to create a
+heavier computational workload.
 
 ```text
-x = r cos(θ) + r
-y = r sin(θ) + r
+x = r * cos(theta) + r
+y = r * sin(theta) + r
 ```
 
 where:
 
 - `r = 5`
-- vertex count = `200`
+- `vertex count = 200`
+
+Concave polygon behavior is verified separately in `ValidationTest.java`.
 
 ---
 
-# Parallelization Strategy
+## Parallelization Strategy
 
-The point set is divided into chunks:
+The project uses data parallelism. The point list is divided into chunks, and
+each worker checks one chunk independently.
 
 ```text
-Total points
-   ↓
-split into N chunks
-   ↓
-assign each chunk to one thread
-   ↓
-merge partial results
+All points
+   |
+   v
+Split into chunks by thread count
+   |
+   v
+Process each chunk in a worker task
+   |
+   v
+Merge partial inside counts
 ```
 
-Implemented using:
+The worker tasks do not share mutable state. Each task returns only its local
+inside count, and the main benchmark runner sums the partial results.
 
 ```java
-ExecutorService executor =
-    Executors.newFixedThreadPool(threadCount);
+ExecutorService executor = Executors.newFixedThreadPool(threadCount);
 ```
 
----
-
-# Benchmark Configuration
-
-## Test Sizes
-
-- 500,000 points
-- 1,000,000 points
-- 2,000,000 points
-
-## Thread Counts
-
-- 1
-- 2
-- 4
-- 8
+The executor is shut down after each parallel run.
 
 ---
 
-# Speedup Formula
+## Benchmark Methodology
+
+Benchmark configuration:
+
+- Point sizes: `500000`, `1000000`, `2000000`
+- Thread counts: `1`, `2`, `4`, `8`
+- Polygon vertices: `200`
+- Warm-up iterations: `1`
+- Measurement runs per configuration: `3`
+- Random seed: fixed for reproducible input data
+
+The benchmark measures:
+
+- average sequential execution time
+- average parallel execution time
+- inside point count
+- speedup
+
+Speedup is calculated as:
 
 ```text
-Speedup = T_sequential / T_parallel
+Speedup = Average Sequential Time / Average Parallel Time
 ```
 
-where:
-
-- `T_sequential` = sequential execution time
-- `T_parallel` = parallel execution time
+The sequential and parallel inside counts are checked for equality. If a
+parallel result does not match the sequential result, the benchmark fails.
 
 ---
 
-# Benchmark Results
+## Benchmark Results
 
-| Points | 1 Thread | 2 Threads | 4 Threads | 8 Threads |
-|--------|----------|-----------|-----------|-----------|
-| 500k | 0.87 | 1.79 | 3.35 | 4.37 |
-| 1M | 0.95 | 1.98 | 2.65 | 3.96 |
-| 2M | 1.00 | 1.99 | 2.88 | 4.18 |
+The following values were generated from `Results/Results.csv`.
+
+| Points | Threads | Sequential Time (ms) | Parallel Time (ms) | Inside Count | Speedup |
+|--------|---------|----------------------|--------------------|--------------|---------|
+| 500000 | 1 | 283.022 | 313.327 | 392433 | 0.90 |
+| 500000 | 2 | 283.022 | 152.558 | 392433 | 1.86 |
+| 500000 | 4 | 283.022 | 112.212 | 392433 | 2.52 |
+| 500000 | 8 | 283.022 | 80.207 | 392433 | 3.53 |
+| 1000000 | 1 | 603.240 | 564.295 | 784968 | 1.07 |
+| 1000000 | 2 | 603.240 | 299.171 | 784968 | 2.02 |
+| 1000000 | 4 | 603.240 | 216.367 | 784968 | 2.79 |
+| 1000000 | 8 | 603.240 | 149.372 | 784968 | 4.04 |
+| 2000000 | 1 | 1100.378 | 1122.428 | 1570954 | 0.98 |
+| 2000000 | 2 | 1100.378 | 591.361 | 1570954 | 1.86 |
+| 2000000 | 4 | 1100.378 | 387.407 | 1570954 | 2.84 |
+| 2000000 | 8 | 1100.378 | 295.307 | 1570954 | 3.73 |
 
 ---
 
-# Performance Graph
+## Performance Graph
 
-<img width="1042" height="675" alt="graph" src="https://github.com/user-attachments/assets/c248d064-b893-4494-b64c-0de2078b9c3c" />
+![Speedup graph](Results/SpeedupGraph.png)
 
 Expected observations:
 
-- speedup increases as thread count increases
-- diminishing returns may appear after 4–8 threads because of thread overhead
+- Parallel execution improves performance as thread count increases.
+- A one-thread parallel run may be slower than the direct sequential version
+  because it includes executor and task management overhead.
+- Speedup does not grow perfectly linearly because of scheduling overhead,
+  worker creation cost, CPU limits, and memory access effects.
 
 ---
 
-# Sample Console Output
+## Validation Cases
 
-```text
-(Testing with 1000000 points)
-Sequential -> Inside: 785472 | Time: 400,021 ms
-1 Thread -> Inside: 785472 | Time: 421,412 ms | Speedup: 0,95
-2 Threads -> Inside: 785472 | Time: 202,540 ms | Speedup: 1,98
-4 Threads -> Inside: 785472 | Time: 150,752 ms | Speedup: 2,65
-8 Threads -> Inside: 785472 | Time: 100,954 ms | Speedup: 3,96
-```
+`ValidationTest.java` checks the correctness of the algorithm without requiring
+JUnit or any external Java testing framework.
+
+Covered cases:
+
+- Convex polygon inside point
+- Convex polygon outside point
+- Concave polygon inside point
+- Concave polygon outside point
+- Point in a concave indentation
+- Point on an edge
+- Point on a vertex
+- Sequential and parallel result equality
 
 ---
 
-# How to Run
+## How to Run
 
-## Compile Java files
+Compile all Java files:
 
 ```bash
 javac *.java
 ```
 
----
+Run validation tests:
 
-## Run the program
+```bash
+java ValidationTest
+```
+
+Run the benchmark:
 
 ```bash
 java Main
 ```
 
----
+Generate the graph manually if needed:
 
-## Generated Outputs
+```bash
+python PlotResults.py
+```
 
-After execution:
+After execution, the generated outputs are:
 
 ```text
 Results/
- ├── Results.csv
- └── SpeedupGraph.png
+|-- Results.csv
+`-- SpeedupGraph.png
 ```
 
 ---
 
-# Key Features
+## Sample Console Output
 
-- Supports both **convex** and **concave** polygons
-- Uses **parallel programming** with multiple threads
-- Automatically calculates **speedup**
-- Automatically generates **CSV benchmark output**
-- Automatically generates **performance graph**
-- Clean and modular object-oriented design
-
----
-
-# Conclusion
-
-The project successfully demonstrates that:
-
-- parallel programming significantly reduces execution time
-- larger datasets benefit more from multithreading
-- Java thread pools provide efficient task scheduling
-
-### Best observed speedup
-
-**4.37x**
-
-using:
-
-- 8 threads
-- 500,000 points
+```text
+Testing with 1000000 points
+Sequential -> Inside: 784968 | Average Time: 603.240 ms
+1 Threads -> Inside: 784968 | Average Time: 564.295 ms | Speedup: 1.07
+2 Threads -> Inside: 784968 | Average Time: 299.171 ms | Speedup: 2.02
+4 Threads -> Inside: 784968 | Average Time: 216.367 ms | Speedup: 2.79
+8 Threads -> Inside: 784968 | Average Time: 149.372 ms | Speedup: 4.04
+```
 
 ---
 
-# Future Improvements
+## Limitations and Future Work
 
-Possible future enhancements:
-
-- testing with larger datasets
-- experimenting with different polygon shapes
-- GPU-based implementation
-- dynamic user input support
-
----
-
-# License
-
-This project is licensed under the MIT License.
-See the `LICENSE` file for details.
+- The benchmark uses a fixed generated polygon for the main performance test.
+- More polygon shapes and vertex counts can be tested for deeper analysis.
+- JVM microbenchmarking could be improved further with a dedicated framework
+  such as JMH, but that is intentionally avoided to keep the project simple.
+- GPU-based or spatial-index-based approaches could be explored as future work.
 
 ---
 
-# Author
+## License
 
-**A. Furkan ÖCEL**  
+This project is licensed under the MIT License. See the `LICENSE` file for
+details.
+
+---
+
+## Author
+
+**A. Furkan OCEL**
