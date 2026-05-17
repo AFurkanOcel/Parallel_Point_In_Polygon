@@ -316,4 +316,4 @@ details.
 
 ## Author
 
-**A. Furkan OCEL**
+**A. Furkan ÖCEL**
