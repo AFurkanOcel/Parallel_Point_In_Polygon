@@ -317,3 +317,9 @@ details.
 ## Author
 
 **A. Furkan ÖCEL**
+
+---
+
+## License
+
+This project is licensed under the terms included in the repository's `LICENSE` file.
