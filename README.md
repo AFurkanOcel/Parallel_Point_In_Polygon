@@ -49,7 +49,7 @@ intersections are counted.
 - Even number of intersections: outside
 - Point on an edge or vertex: inside
 
-<img width="701" height="298" alt="ray casting" src="https://github.com/user-attachments/assets/e7d6e561-633a-4337-ba79-60721bad4e4a" />
+<img width="701" height="298" alt="ray casting" src="assets/screenshots/ray-casting.png" />
 
 ---
 
@@ -85,6 +85,11 @@ ParallelPointInPolygon/
 |-- PlotResults.py
 |-- README.md
 |-- LICENSE
+|-- assets/
+|   `-- screenshots/
+|       |-- algorithm-workflow.png
+|       |-- performance-graph.png
+|       `-- ray-casting.png
 |
 `-- Results/
     |-- Results.csv
@@ -114,7 +119,7 @@ ParallelPointInPolygon/
 
 ## Algorithm Workflow
 
-<img width="1024" height="1466" alt="workflow" src="https://github.com/user-attachments/assets/ef5d63e5-0597-4036-956f-90efd6382862" />
+<img width="1024" height="1466" alt="workflow" src="assets/screenshots/algorithm-workflow.png" />
 
 ---
 
@@ -218,7 +223,7 @@ The following values were generated from `Results/Results.csv`.
 
 ## Performance Graph
 
-<img width="1050" height="669" alt="graph" src="https://github.com/user-attachments/assets/aa5154e9-74a3-4819-8d06-ca9e96b3f16a" />
+<img width="1050" height="669" alt="graph" src="assets/screenshots/performance-graph.png" />
 
 Expected observations:
 
