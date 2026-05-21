@@ -312,13 +312,6 @@ Sequential -> Inside: 784968 | Average Time: 603.240 ms
 
 ---
 
-## License
-
-This project is licensed under the MIT License. See the `LICENSE` file for
-details.
-
----
-
 ## Author
 
 **A. Furkan ÖCEL**
