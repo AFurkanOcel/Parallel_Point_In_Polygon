@@ -87,7 +87,6 @@ ParallelPointInPolygon/
 |-- LICENSE
 |-- assets/
 |   `-- screenshots/
-|
 `-- Results/
     |-- Results.csv
     `-- SpeedupGraph.png
