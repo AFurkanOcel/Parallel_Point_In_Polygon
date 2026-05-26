@@ -87,9 +87,6 @@ ParallelPointInPolygon/
 |-- LICENSE
 |-- assets/
 |   `-- screenshots/
-|       |-- algorithm-workflow.png
-|       |-- performance-graph.png
-|       `-- ray-casting.png
 |
 `-- Results/
     |-- Results.csv
