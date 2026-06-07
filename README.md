@@ -89,6 +89,8 @@ ParallelPointInPolygon/
 |       |-- algorithm-workflow.png
 |       |-- performance-graph.png
 |       `-- ray-casting.png
+|-- build/
+|   `-- .gitkeep
 |-- report/
 |   `-- project_report_Turkish.pdf
 |-- scripts/
