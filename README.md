@@ -66,6 +66,18 @@ intersections are counted.
 
 ---
 
+## Project Report
+
+The final Turkish project report is available here:
+
+[report/project_report_Turkish.pdf](report/project_report_Turkish.pdf)
+
+The report explains the point-in-polygon problem, the Ray Casting algorithm,
+the Java parallelization strategy, benchmark methodology, speedup results,
+validation cases, and final conclusions in Turkish.
+
+---
+
 ## Project Structure
 
 ```text
