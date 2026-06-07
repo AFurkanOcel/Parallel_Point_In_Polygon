@@ -2,8 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-RESULTS_CSV = "Results/Results.csv"
-OUTPUT_IMAGE = "Results/SpeedupGraph.png"
+RESULTS_CSV = "results/Results.csv"
+OUTPUT_IMAGE = "results/SpeedupGraph.png"
 
 
 def main():

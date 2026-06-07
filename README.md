@@ -70,24 +70,32 @@ intersections are counted.
 
 ```text
 ParallelPointInPolygon/
-|-- Main.java
-|-- Point.java
-|-- Polygon.java
-|-- PointInPolygon.java
-|-- WorkerTask.java
-|-- Benchmark.java
-|-- BenchmarkConfig.java
-|-- BenchmarkResult.java
-|-- BenchmarkRunner.java
-|-- CsvResultWriter.java
-|-- DataGenerator.java
-|-- ValidationTest.java
-|-- PlotResults.py
 |-- README.md
 |-- LICENSE
 |-- assets/
 |   `-- screenshots/
-`-- Results/
+|       |-- algorithm-workflow.png
+|       |-- performance-graph.png
+|       `-- ray-casting.png
+|-- report/
+|   `-- project_report_Turkish.pdf
+|-- scripts/
+|   `-- PlotResults.py
+|-- src/
+|   |-- Main.java
+|   |-- Point.java
+|   |-- Polygon.java
+|   |-- PointInPolygon.java
+|   |-- WorkerTask.java
+|   |-- Benchmark.java
+|   |-- BenchmarkConfig.java
+|   |-- BenchmarkResult.java
+|   |-- BenchmarkRunner.java
+|   |-- CsvResultWriter.java
+|   |-- DataGenerator.java
+|   `-- ValidationTest.java
+`-- results/
+    |-- .gitkeep
     |-- Results.csv
     `-- SpeedupGraph.png
 ```
@@ -98,18 +106,19 @@ ParallelPointInPolygon/
 
 | File | Responsibility |
 |------|----------------|
-| `Main.java` | Starts the benchmark workflow and graph generation |
-| `Point.java` | Immutable point model |
-| `Polygon.java` | Immutable polygon vertex container |
-| `PointInPolygon.java` | Ray Casting implementation with boundary handling |
-| `WorkerTask.java` | Parallel worker task for a point chunk |
-| `BenchmarkRunner.java` | Sequential and parallel execution logic |
-| `BenchmarkConfig.java` | Benchmark parameters |
-| `BenchmarkResult.java` | Benchmark result model |
-| `CsvResultWriter.java` | CSV output writer |
-| `DataGenerator.java` | Random point and polygon generation |
-| `ValidationTest.java` | Framework-free correctness checks |
-| `PlotResults.py` | Speedup graph generator |
+| `src/Main.java` | Starts the benchmark workflow and graph generation |
+| `src/Point.java` | Immutable point model |
+| `src/Polygon.java` | Immutable polygon vertex container |
+| `src/PointInPolygon.java` | Ray Casting implementation with boundary handling |
+| `src/WorkerTask.java` | Parallel worker task for a point chunk |
+| `src/BenchmarkRunner.java` | Sequential and parallel execution logic |
+| `src/BenchmarkConfig.java` | Benchmark parameters |
+| `src/BenchmarkResult.java` | Benchmark result model |
+| `src/CsvResultWriter.java` | CSV output writer |
+| `src/DataGenerator.java` | Random point and polygon generation |
+| `src/ValidationTest.java` | Framework-free correctness checks |
+| `scripts/PlotResults.py` | Speedup graph generator |
+| `report/project_report_Turkish.pdf` | Turkish project report |
 
 ---
 
@@ -134,7 +143,7 @@ where:
 - `r = 5`
 - `vertex count = 200`
 
-Concave polygon behavior is verified separately in `ValidationTest.java`.
+Concave polygon behavior is verified separately in `src/ValidationTest.java`.
 
 ---
 
@@ -198,22 +207,22 @@ parallel result does not match the sequential result, the benchmark fails.
 
 ## Benchmark Results
 
-The following values were generated from `Results/Results.csv`.
+The following values were generated from `results/Results.csv`.
 
 | Points | Threads | Sequential Time (ms) | Parallel Time (ms) | Inside Count | Speedup |
 |--------|---------|----------------------|--------------------|--------------|---------|
-| 500000 | 1 | 289.188 | 291.079 | 392433 | 0.99 |
-| 500000 | 2 | 289.188 | 153.520 | 392433 | 1.88 |
-| 500000 | 4 | 289.188 | 108.981 | 392433 | 2.65 |
-| 500000 | 8 | 289.188 | 75.545 | 392433 | 3.83 |
-| 1000000 | 1 | 589.595 | 581.261 | 784968 | 1.01 |
-| 1000000 | 2 | 589.595 | 318.613 | 784968 | 1.85 |
-| 1000000 | 4 | 589.595 | 184.371 | 784968 | 3.20 |
-| 1000000 | 8 | 589.595 | 151.475 | 784968 | 3.89 |
-| 2000000 | 1 | 1169.686 | 1143.315 | 1570954 | 1.02 |
-| 2000000 | 2 | 1169.686 | 650.962 | 1570954 | 1.80 |
-| 2000000 | 4 | 1169.686 | 414.822 | 1570954 | 2.82 |
-| 2000000 | 8 | 1169.686 | 329.411 | 1570954 | 3.55 |
+| 500000 | 1 | 417.349 | 429.766 | 392433 | 0.97 |
+| 500000 | 2 | 417.349 | 211.950 | 392433 | 1.97 |
+| 500000 | 4 | 417.349 | 154.925 | 392433 | 2.69 |
+| 500000 | 8 | 417.349 | 102.811 | 392433 | 4.06 |
+| 1000000 | 1 | 956.429 | 895.037 | 784968 | 1.07 |
+| 1000000 | 2 | 956.429 | 413.202 | 784968 | 2.31 |
+| 1000000 | 4 | 956.429 | 292.380 | 784968 | 3.27 |
+| 1000000 | 8 | 956.429 | 190.277 | 784968 | 5.03 |
+| 2000000 | 1 | 1741.211 | 1718.575 | 1570954 | 1.01 |
+| 2000000 | 2 | 1741.211 | 824.813 | 1570954 | 2.11 |
+| 2000000 | 4 | 1741.211 | 517.246 | 1570954 | 3.37 |
+| 2000000 | 8 | 1741.211 | 410.366 | 1570954 | 4.24 |
 
 ---
 
@@ -233,7 +242,7 @@ Expected observations:
 
 ## Validation Cases
 
-`ValidationTest.java` checks the correctness of the algorithm without requiring
+`src/ValidationTest.java` checks the correctness of the algorithm without requiring
 JUnit or any external Java testing framework.
 
 Covered cases:
@@ -254,31 +263,31 @@ Covered cases:
 Compile all Java files:
 
 ```bash
-javac *.java
+javac -d build src/*.java
 ```
 
 Run validation tests:
 
 ```bash
-java ValidationTest
+java -cp build ValidationTest
 ```
 
 Run the benchmark:
 
 ```bash
-java Main
+java -cp build Main
 ```
 
 Generate the graph manually if needed:
 
 ```bash
-python PlotResults.py
+python scripts/PlotResults.py
 ```
 
 After execution, the generated outputs are:
 
 ```text
-Results/
+results/
 |-- Results.csv
 `-- SpeedupGraph.png
 ```
@@ -289,11 +298,11 @@ Results/
 
 ```text
 Testing with 1000000 points
-Sequential -> Inside: 784968 | Average Time: 603.240 ms
-1 Threads -> Inside: 784968 | Average Time: 564.295 ms | Speedup: 1.07
-2 Threads -> Inside: 784968 | Average Time: 299.171 ms | Speedup: 2.02
-4 Threads -> Inside: 784968 | Average Time: 216.367 ms | Speedup: 2.79
-8 Threads -> Inside: 784968 | Average Time: 149.372 ms | Speedup: 4.04
+Sequential -> Inside: 784968 | Average Time: 956.429 ms
+1 Threads -> Inside: 784968 | Average Time: 895.037 ms | Speedup: 1.07
+2 Threads -> Inside: 784968 | Average Time: 413.202 ms | Speedup: 2.31
+4 Threads -> Inside: 784968 | Average Time: 292.380 ms | Speedup: 3.27
+8 Threads -> Inside: 784968 | Average Time: 190.277 ms | Speedup: 5.03
 ```
 
 ---
@@ -311,9 +320,3 @@ Sequential -> Inside: 784968 | Average Time: 603.240 ms
 ## Author
 
 **A. Furkan ÖCEL**
-
----
-
-## License
-
-This project is licensed under the terms included in the repository's `LICENSE` file.
