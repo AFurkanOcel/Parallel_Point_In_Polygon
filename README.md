@@ -343,3 +343,9 @@ Sequential -> Inside: 784968 | Average Time: 956.429 ms
 ## Author
 
 **A. Furkan ÖCEL**
+
+---
+
+## License
+
+This project is licensed under the terms included in the repository's `LICENSE` file.
