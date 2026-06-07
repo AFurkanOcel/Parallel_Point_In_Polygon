@@ -290,10 +290,19 @@ Run the benchmark:
 java -cp build Main
 ```
 
-Generate the graph manually if needed:
+The benchmark writes `results/Results.csv` and automatically generates
+`results/SpeedupGraph.png`.
+
+Regenerate only the graph from the existing CSV file if needed:
 
 ```bash
 python scripts/PlotResults.py
+```
+
+Open the generated graph on Windows PowerShell:
+
+```powershell
+start results\SpeedupGraph.png
 ```
 
 After execution, the generated outputs are:
